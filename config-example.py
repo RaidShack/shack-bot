@@ -1,2 +1,3 @@
 token = '' # bot token
-gdrive = '' # google drive folder
+gdrive_folder = '' # google drive folder
+gdrive_api = '' # google drive api key

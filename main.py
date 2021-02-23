@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 
 initial_extensions = (
+    'cogs.gdrive',
     'cogs.member',
-    'cogs.post',
     'cogs.stats',
 )
 
@@ -12,7 +12,8 @@ initial_extensions = (
 class RaidShack(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.gdrive = config.gdrive
+        self.gdrive_folder = config.gdrive_folder
+        self.gdrive_api = config.gdrive_api
 
         for extension in initial_extensions:
             self.load_extension(extension)
