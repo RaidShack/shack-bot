@@ -30,10 +30,11 @@ class Gdrive(commands.Cog):
         return re.sub(r'\n\s*\n', '\n\n', wrapper.read())
 
     @commands.command()
+    @commands.has_permissions(manage_channels=True)
     async def pin(self, ctx, filename):
 
-        def not_pinned(msg):
-            return not msg.pinned
+        def not_pinned(check):
+            return not check.pinned
 
         async with ctx.typing():
             doc = self.get_doc(filename)
@@ -45,6 +46,7 @@ class Gdrive(commands.Cog):
             await ctx.send('Document not found')
 
     @commands.command()
+    @commands.has_permissions(manage_channels=True)
     async def post(self, ctx, filename):
         async with ctx.typing():
             doc = self.get_doc(filename)
@@ -55,6 +57,7 @@ class Gdrive(commands.Cog):
             await ctx.send('Document not found')
 
     @commands.command()
+    @commands.has_permissions(manage_channels=True)
     async def preview(self, ctx, filename):
         async with ctx.typing():
             doc = self.get_doc(filename)
@@ -65,6 +68,15 @@ class Gdrive(commands.Cog):
             await ctx.message.delete()
         else:
             await ctx.send('Document not found')
+
+    @pin.error
+    @post.error
+    @preview.error
+    async def permission_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("Sorry, you can't run this command")
+        else:
+            raise error
 
 
 def setup(bot):

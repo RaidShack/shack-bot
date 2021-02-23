@@ -8,6 +8,7 @@ class Stats(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_permissions(manage_channels=True)
     async def stats(self, ctx):
         members = await ctx.guild.fetch_members(limit=None).flatten()
         member_count = 0
@@ -59,6 +60,13 @@ class Stats(commands.Cog):
         embed.add_field(name='Server Stats:', value='\n'.join(values), inline=False)
 
         await ctx.send(embed=embed)
+
+    @stats.error
+    async def permission_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("Sorry, you can't run this command")
+        else:
+            raise error
 
 
 def setup(bot):
