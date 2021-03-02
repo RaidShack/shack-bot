@@ -1,4 +1,5 @@
 import asyncio
+import config
 import io
 import re
 from discord.ext import commands
@@ -11,9 +12,10 @@ class Gdrive(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def get_doc(self, filename):
-        service = build('drive', 'v3', developerKey=self.bot.gdrive_api)
-        param = {"q": "'" + self.bot.gdrive_folder + "' in parents"}
+    @staticmethod
+    def get_doc(filename):
+        service = build('drive', 'v3', developerKey=config.gdrive_api)
+        param = {"q": "'" + config.gdrive_folder + "' in parents"}
         result = service.files().list(**param).execute()
         files = result.get('files')
         file = next((item for item in files if item['name'] == filename), None)
