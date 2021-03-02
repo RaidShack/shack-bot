@@ -1,4 +1,4 @@
 discord
 google-api-python-client
 quart
-quart_cors
+Quart-CORS

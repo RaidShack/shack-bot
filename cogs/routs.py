@@ -1,11 +1,10 @@
 from discord.ext import commands
 from quart import Quart, request, send_from_directory
-from quart_cors import cors
+from quart_cors import route_cors
 import config
 import discord
 
 app = Quart(__name__)
-app = cors(app, allow_origin="*")
 
 
 class Routs(commands.Cog):
@@ -20,6 +19,7 @@ class Routs(commands.Cog):
 
     @staticmethod
     @app.route('/', methods=['GET', 'POST'])
+    @route_cors(allow_origin="*")
     async def index():
         data = await request.get_json()
         print(data)
