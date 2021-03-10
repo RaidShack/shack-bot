@@ -72,12 +72,17 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def logs(self, ctx):
+    async def logs(self, ctx, delete=None):
         logs = ['git.log', 'pip.log', 'access.log', 'error.log']
         files = []
-        for log in logs:
-            files.append(discord.File(log))
-        return await ctx.send('git pull done', files=files)
+        if delete:
+            for log in logs:
+                open(log, 'w').close()
+            await ctx.send('logs deleted')
+        else:
+            for log in logs:
+                files.append(discord.File(log))
+            await ctx.send('current logs', files=files)
 
 
 def setup(bot):
