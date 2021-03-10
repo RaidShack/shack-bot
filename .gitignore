@@ -2,3 +2,7 @@
 venv/
 __pycache__/
 config.py
+access.log
+error.log
+pip.log
+git.log

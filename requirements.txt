@@ -2,3 +2,4 @@ discord
 google-api-python-client
 quart
 Quart-CORS
+Hypercorn

@@ -1,4 +1,8 @@
 import asyncio
+import os
+import urllib.request
+import discord
+
 import config
 import io
 import re
@@ -31,6 +35,42 @@ class Gdrive(commands.Cog):
         wrapper = io.TextIOWrapper(fh, encoding='utf-8-sig')
         return re.sub(r'\n\s*\n', '\n\n', wrapper.read())
 
+    @staticmethod
+    async def do_attachment(ctx, message):
+        if '[img]' in message:
+            content = message.split('[img]')
+            content_url = content[0] if '[img]' in content[0] else content[1]
+            content_text = '' if '[img]' in content[0] else content[0]
+            url = content_url.replace('[img]', '')
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            data = io.BytesIO(urllib.request.urlopen(req).read())
+            return await ctx.send(content_text, file=discord.File(data, os.path.split(url)[-1]))
+        else:
+            return await ctx.send(message)
+
+    async def do_message(self, ctx, doc, action=None, delay=None):
+        to_delete = []
+        if '[break]' in doc:
+            messages = doc.split('[break]\n')
+            for message in messages:
+                message = await self.do_attachment(ctx, message)
+                if action == 'pin':
+                    await message.pin()
+                elif action == 'preview':
+                    to_delete.append(message.id)
+            if to_delete:
+                await asyncio.sleep(delay)
+                for message_id in to_delete:
+                    message = await ctx.fetch_message(message_id)
+                    await message.delete()
+        else:
+            message = await self.do_attachment(ctx, doc)
+            if action == 'pin':
+                await message.pin()
+            elif action == 'preview':
+                await asyncio.sleep(delay)
+                await message.delete()
+
     @commands.command()
     @commands.has_permissions(manage_channels=True)
     async def pin(self, ctx, filename):
@@ -41,8 +81,7 @@ class Gdrive(commands.Cog):
         async with ctx.typing():
             doc = self.get_doc(filename)
         if doc:
-            message = await ctx.send(doc)
-            await message.pin()
+            await self.do_message(ctx, doc, 'pin')
             await ctx.channel.purge(limit=100, check=not_pinned)
         else:
             await ctx.send('Document not found')
@@ -53,20 +92,18 @@ class Gdrive(commands.Cog):
         async with ctx.typing():
             doc = self.get_doc(filename)
         if doc:
-            await ctx.send(doc)
+            await self.do_message(ctx, doc)
             await ctx.message.delete()
         else:
             await ctx.send('Document not found')
 
     @commands.command()
     @commands.has_permissions(manage_channels=True)
-    async def preview(self, ctx, filename):
+    async def preview(self, ctx, filename, delay=30):
         async with ctx.typing():
             doc = self.get_doc(filename)
         if doc:
-            message = await ctx.send(doc)
-            await asyncio.sleep(30)
-            await message.delete()
+            await self.do_message(ctx, doc, 'preview', delay)
             await ctx.message.delete()
         else:
             await ctx.send('Document not found')
