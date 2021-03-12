@@ -28,6 +28,8 @@ class Routes(commands.Cog):
                    'errorlog': 'error.log',
                    }
         await serve(self.quart, Config.from_mapping(options))
+        self.bot.loop.set_exception_handler(self._exception_handler)
+
 
     @staticmethod
     @quart.route('/.well-known/acme-challenge/<challenge>')
@@ -48,6 +50,14 @@ class Routes(commands.Cog):
         data = await request.get_json()
         print(data)
         return 'OK', 200
+
+    @staticmethod
+    def _exception_handler(loop, context):
+        exception = context.get("exception")
+        if isinstance(exception, ssl.SSLError):
+            pass
+        else:
+            loop.default_exception_handler(context)
 
 
 def setup(bot):
