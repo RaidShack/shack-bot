@@ -35,7 +35,7 @@ class Routes(commands.Cog):
         return await send_from_directory('.well-known/acme-challenge', challenge)
 
     @staticmethod
-    @quart.route('/', methods=['GET', 'POST'])
+    @quart.route('/topgg/', methods=['POST'])
     @route_cors(allow_origin='*')
     async def index():
         data = await request.get_json()
