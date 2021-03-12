@@ -47,7 +47,7 @@ class Routes(commands.Cog):
             data = await request.get_json()
             guild = self.bot.get_guild(int(data['guild']))
             embed = discord.Embed(title='Thanks for the vote over at top.gg,\nwe appreciate the support!',
-                                  description=f'[Show your :two_hearts: and vote for the {guild.name}!](https://top.gg/servers/736436788696055829/vote)',
+                                  description=f'[Show your :two_hearts: and vote for the {guild.name}!](https://top.gg/servers/736436788696055829)',
                                   color=discord.Color.random())
             embed.set_author(name='top.gg Servers', url='https://top.gg/servers/736436788696055829',
                              icon_url='https://static.raidshack.com/topgg/serverbot.png')
