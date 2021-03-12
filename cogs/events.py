@@ -1,3 +1,5 @@
+import asyncio
+
 from discord.ext import commands
 import config
 import discord
@@ -38,6 +40,29 @@ class Events(commands.Cog):
         await member.add_roles(member.guild.get_role(config.role_id))
         if channel is not None:
             await channel.send(random.choice(welcome_text).format(member.mention))
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.bot.user:
+            return
+        nexus_profile = ('!profile', '!set', '!tc', '!search', '!level', '!ign')
+        if message.content.startswith(nexus_profile) and message.channel.id == message.guild.system_channel.id:
+            kill_joy = await message.channel.send(f'{message.author.mention} please use <#791790679511793666> for profile commands')
+            await asyncio.sleep(10)
+            try:
+                await message.delete()
+            except discord.NotFound:
+                pass
+            await kill_joy.delete()
+        nexus_raid = ('!r', '!raid')
+        if message.content.startswith(nexus_raid) and message.channel.id == message.guild.system_channel.id:
+            kill_joy = await message.channel.send(f'{message.author.mention} please use <#777208376814862376> for raid commands')
+            await asyncio.sleep(10)
+            try:
+                await message.delete()
+            except discord.NotFound:
+                pass
+            await kill_joy.delete()
 
 
 def setup(bot):
