@@ -42,7 +42,7 @@ class Routes(commands.Cog):
         return 'OK', 200
 
     @staticmethod
-    @quart.route('topgg/', methods=['POST'])
+    @quart.route('/topgg', methods=['POST'])
     @route_cors(allow_origin='*')
     async def topgg():
         data = await request.get_json()
