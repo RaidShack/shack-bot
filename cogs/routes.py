@@ -1,3 +1,4 @@
+import random
 import ssl
 from discord.ext import tasks, commands
 from quart import Quart, request, send_from_directory
@@ -28,14 +29,29 @@ class Routes(commands.Cog):
         @quart.route('/topgg', methods=['POST'])
         @route_cors(allow_origin='*')
         async def topgg():
+            party_hat = [
+                'https://img.pokemondb.net/sprites/go/normal/pikachu-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/raichu-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/raticate-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/wobbuffet-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/wurmple-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/pichu-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/pikachu-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/squirtle-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/bulbasaur-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/charmander-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/eevee-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/nidorino-red-party-hat.png',
+                'https://img.pokemondb.net/sprites/go/normal/gengar-red-party-hat.png',
+            ]
             data = await request.get_json()
             guild = self.bot.get_guild(int(data['guild']))
             embed = discord.Embed(title='Thanks for the vote over at top.gg,\nwe appreciate the support!',
                                   description=f'[Show your :two_hearts: and vote for the {guild.name}!](https://top.gg/servers/736436788696055829/vote)',
-                                  color=0xb658d0)
+                                  color=discord.Color.random())
             embed.set_author(name='top.gg Servers', url='https://top.gg/servers/736436788696055829',
                              icon_url='https://static.raidshack.com/topgg/serverbot.png')
-            embed.set_thumbnail(url='https://img.pokemondb.net/sprites/go/normal/pikachu-party-hat.png')
+            embed.set_thumbnail(url=random.choice(party_hat))
             if data['type'] == 'upvote':
                 await guild.system_channel.send(f'<@{data["user"]}>, you\'re awesome!\n\n', embed=embed)
             return 'OK', 200
