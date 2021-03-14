@@ -46,6 +46,7 @@ class Routes(commands.Cog):
             ]
             data = await request.get_json()
             guild = self.bot.get_guild(int(data['guild']))
+            channel = guild.get_channel(820730247682850826)
             embed = discord.Embed(title='Thanks for the vote over at top.gg,\nwe appreciate the support!',
                                   description=f'[Show your :two_hearts: and vote for the {guild.name}!](https://top.gg/servers/736436788696055829)',
                                   color=discord.Color.random())
@@ -53,7 +54,7 @@ class Routes(commands.Cog):
                              icon_url='https://static.raidshack.com/topgg/serverbot.png')
             embed.set_thumbnail(url=random.choice(party_hat))
             if data['type'] == 'upvote':
-                await guild.system_channel.send(f'<@{data["user"]}>, you\'re awesome!\n\n', embed=embed)
+                await channel.send(f'<@{data["user"]}>, you\'re awesome!\n\n', embed=embed)
             return 'OK', 200
 
     def cog_unload(self):
