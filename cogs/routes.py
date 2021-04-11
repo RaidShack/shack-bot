@@ -65,7 +65,7 @@ class Routes(commands.Cog):
         options = {'certfile': certfile,
                    'keyfile': keyfile,
                    'bind': '127.0.0.1:5000',
-                   'insecure-bind': '127.0.0.1:8000',
+                   'insecure_bind': '127.0.0.1:8000',
                    'loglevel': loglevel,
                    'accesslog': 'access.log',
                    'errorlog': 'error.log',
