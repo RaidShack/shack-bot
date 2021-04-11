@@ -62,10 +62,7 @@ class Routes(commands.Cog):
 
     @tasks.loop()
     async def api(self):
-        options = {'certfile': certfile,
-                   'keyfile': keyfile,
-                   'bind': bind,
-                   'loglevel': loglevel,
+        options = {'loglevel': loglevel,
                    'accesslog': 'access.log',
                    'errorlog': 'error.log',
                    }
