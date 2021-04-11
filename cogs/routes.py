@@ -64,6 +64,7 @@ class Routes(commands.Cog):
     async def api(self):
         options = {'certfile': certfile,
                    'keyfile': keyfile,
+                   'bind': bind,
                    'loglevel': loglevel,
                    'accesslog': 'access.log',
                    'errorlog': 'error.log',
